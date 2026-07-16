@@ -1,0 +1,14 @@
+[dotenv@17.3.1] injecting env (5) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+FULL SERVICE 211 INFO:
+{
+  "service": 211,
+  "name": "⭕YouTube Likes  - Speed:- 150K/Day - Refill:- 30Days {Start:- 0-1hrs} 😍🔥",
+  "type": "Default",
+  "rate": "34.78",
+  "min": 10,
+  "max": 300000,
+  "dripfeed": false,
+  "refill": false,
+  "cancel": false,
+  "category": "YouTube Likes"
+}
