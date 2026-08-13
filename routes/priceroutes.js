@@ -51,12 +51,32 @@ router.get("/", async (req, res) => {
 
     }
 
-    const prices = await PriceSet.find(query)
-      .sort({ createdAt: -1 });
+    const [prices, allPrices] = await Promise.all([
+      PriceSet.find(query).sort({ createdAt: -1 }),
+      PriceSet.find({}).select("platform status")
+    ]);
+
+    const activePrices = allPrices.filter(
+      (price) => String(price.status || "Active").toLowerCase() === "active"
+    );
+
+    const stats = {
+      totalServices: allPrices.length,
+      instagramCount: activePrices.filter(
+        (price) => String(price.platform).toLowerCase() === "instagram"
+      ).length,
+      youtubeCount: activePrices.filter(
+        (price) => String(price.platform).toLowerCase() === "youtube"
+      ).length,
+      tiktokCount: activePrices.filter(
+        (price) => String(price.platform).toLowerCase() === "tiktok"
+      ).length
+    };
 
     res.json({
       success: true,
-      prices
+      prices,
+      stats
     });
 
   } catch (error) {
