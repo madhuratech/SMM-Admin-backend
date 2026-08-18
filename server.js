@@ -1,6 +1,15 @@
-const express = require("express");
-require("dotenv").config();
+const path = require("path");
+const fs = require("fs");
 
+const nodeEnv = process.env.NODE_ENV || "development";
+const envFilePath = path.resolve(__dirname, `.env.${nodeEnv}`);
+
+if (fs.existsSync(envFilePath)) {
+  require("dotenv").config({ path: envFilePath });
+}
+require("dotenv").config(); // Fallback to default .env
+
+const express = require("express");
 const cors = require("cors");
 
 const connectDB = require("./config/database");
@@ -20,7 +29,16 @@ const app = express();
 connectDB();
 
 // MIDDLEWARE
-app.use(cors());
+const allowedOrigins = process.env.CLIENT_URL
+  ? process.env.CLIENT_URL.split(",").map(url => url.trim())
+  : ["http://localhost:5174", "http://localhost:5173", "https://admin.tikytop.com", "https://tikytop.com"];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true
+  })
+);
 
 app.use(express.json());
 
